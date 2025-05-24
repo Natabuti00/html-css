@@ -3,41 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Struktur Atom</title>
+    <title>Game Struktur Atom - Enhanced</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
+        * {
             margin: 0;
-            padding: 20px;
-            background-color: #f0f8ff;
+            padding: 0;
+            box-sizing: border-box;
         }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
-            background-color: white;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+            padding: 30px;
+        }
+
+        .game-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .element-selector {
+            background: #f8f9fa;
             padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+        }
+
+        .selector-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .selector-row:last-child {
+            margin-bottom: 0;
+        }
+
+        select, input, button {
+            padding: 12px 16px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border: 2px solid #dee2e6;
+            font-size: 14px;
+            transition: all 0.3s ease;
         }
-        h1 {
-            color: #2c3e50;
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
         .game-area {
             position: relative;
-            width: 600px;
-            height: 400px;
-            margin: 20px auto;
-            border: 2px solid #3498db;
-            border-radius: 10px;
+            width: 100%;
+            height: 500px;
+            background: radial-gradient(circle, #1a1a2e 0%, #16213e 100%);
+            border-radius: 15px;
             overflow: hidden;
-            background-color: #1a1a2e;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
         }
+
+        .electron-trail {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, #ffeaa7 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: trailFade 0.5s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            0% { opacity: 0.8; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.3); }
+        }
+
         .nucleus {
             position: absolute;
-            width: 100px;
-            height: 100px;
-            background-color: #e74c3c;
+            background: radial-gradient(circle, #e74c3c 0%, #c0392b 100%);
             border-radius: 50%;
             top: 50%;
             left: 50%;
@@ -46,211 +146,660 @@
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
-            box-shadow: 0 0 15px rgba(231, 76, 60, 0.7);
+            box-shadow: 0 0 30px rgba(231, 76, 60, 0.8);
+            animation: nucleusGlow 2s ease-in-out infinite alternate;
         }
+
+        @keyframes nucleusGlow {
+            0% { box-shadow: 0 0 30px rgba(231, 76, 60, 0.8); }
+            100% { box-shadow: 0 0 50px rgba(231, 76, 60, 1); }
+        }
+
         .proton, .neutron {
-            width: 30px;
-            height: 30px;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
-            margin: 2px;
+            margin: 1px;
+            animation: nucleonFloat 3s ease-in-out infinite;
         }
+
         .proton {
-            background-color: #e74c3c;
-            border: 2px solid #c0392b;
+            background: radial-gradient(circle, #ff6b6b 0%, #e74c3c 100%);
+            box-shadow: 0 0 8px rgba(231, 76, 60, 0.6);
         }
+
         .neutron {
-            background-color: #3498db;
-            border: 2px solid #2980b9;
+            background: radial-gradient(circle, #74b9ff 0%, #3498db 100%);
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.6);
         }
+
+        @keyframes nucleonFloat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
         .orbit {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            border: 1px dashed #3498db;
+            border: 2px dashed rgba(116, 185, 255, 0.6);
             border-radius: 50%;
-            opacity: 0.8;
+            animation: orbitPulse 4s ease-in-out infinite;
         }
+
+        @keyframes orbitPulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
         .electron {
             position: absolute;
-            width: 20px;
-            height: 20px;
-            background-color: #f1c40f;
+            width: 12px;
+            height: 12px;
+            background: radial-gradient(circle, #ffeaa7 0%, #fdcb6e 100%);
             border-radius: 50%;
             transform: translate(-50%, -50%);
-            box-shadow: 0 0 10px rgba(241, 196, 15, 0.8);
+            box-shadow: 0 0 15px rgba(253, 203, 110, 0.8);
+            animation: electronGlow 1s ease-in-out infinite alternate;
         }
-        .controls {
-            margin-top: 20px;
+
+        @keyframes electronGlow {
+            0% { box-shadow: 0 0 15px rgba(253, 203, 110, 0.8); }
+            100% { box-shadow: 0 0 25px rgba(253, 203, 110, 1); }
         }
-        .element-selector {
-            margin-bottom: 20px;
-        }
-        select, button {
-            padding: 8px 15px;
-            margin: 5px;
-            border-radius: 5px;
-            border: 1px solid #3498db;
-            background-color: white;
-            cursor: pointer;
-        }
-        button {
-            background-color: #3498db;
+
+        .score-display {
+            background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
             color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
             font-weight: bold;
-            transition: background-color 0.3s;
+            font-size: 1.1em;
         }
-        button:hover {
-            background-color: #2980b9;
-        }
-        .info-panel {
-            background-color: #ecf0f1;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 20px;
-            text-align: left;
-        }
-        .element-name {
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .element-details {
+
+        .controls {
             display: flex;
-            justify-content: space-around;
-            margin-top: 10px;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
-        .detail-item {
+
+        .control-button {
+            min-width: 120px;
+            position: relative;
+        }
+
+        .pulse-animation {
+            animation: pulseButton 2s infinite;
+        }
+
+        @keyframes pulseButton {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .info-panel {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #dee2e6;
+        }
+
+        .element-name {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
             text-align: center;
         }
+
+        .element-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .detail-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .detail-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .detail-label {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+
         .detail-value {
             font-weight: bold;
-            font-size: 18px;
+            font-size: 1.4em;
+            color: #2c3e50;
+        }
+
+        .element-description {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            line-height: 1.6;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .quiz-panel {
+            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        .quiz-panel h3 {
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .quiz-question {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .quiz-option {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .quiz-option.correct {
+            background: rgba(46, 204, 113, 0.8);
+        }
+
+        .quiz-option.incorrect {
+            background: rgba(231, 76, 60, 0.8);
+        }
+
+        .custom-inputs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .input-group label {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+
+        .instructions-panel {
+            background: linear-gradient(135deg, #6c5ce7 0%, #5f3dc4 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        .instructions-panel h3 {
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            text-align: center;
+        }
+
+        .instruction-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .step-number {
+            background: rgba(255, 255, 255, 0.2);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            line-height: 1.5;
+        }
+
+        .step-content strong {
+            color: #ffeaa7;
+        }
+
+        .tutorial-highlight {
+            box-shadow: 0 0 20px #00b894 !important;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .tutorial-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 999;
+            display: none;
+        }
+
+        .tutorial-tooltip {
+            position: absolute;
+            background: #2d3436;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 1001;
+            max-width: 200px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .tutorial-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: #2d3436;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .element-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .custom-inputs {
+                grid-template-columns: 1fr;
+            }
+            
+            .selector-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Eksplorasi Struktur Atom</h1>
+        <div class="header">
+            <h1>🔬 Eksplorasi Struktur Atom</h1>
+            <p>Pelajari struktur atom dengan visualisasi interaktif yang menarik!</p>
+        </div>
         
-        <div class="element-selector">
-            <label for="element-select">Pilih Unsur: </label>
-            <select id="element-select">
-                <option value="1">Hidrogen (H)</option>
-                <option value="2">Helium (He)</option>
-                <option value="3">Litium (Li)</option>
-                <option value="6">Karbon (C)</option>
-                <option value="8">Oksigen (O)</option>
-                <option value="11">Natrium (Na)</option>
-                <option value="17">Klor (Cl)</option>
-                <option value="26">Besi (Fe)</option>
-                <option value="79">Emas (Au)</option>
-                <option value="custom">Kustom</option>
-            </select>
+        <div class="main-content">
+            <div class="game-section">
+                <div class="element-selector">
+                    <div class="selector-row">
+                        <label for="element-select"><strong>Pilih Unsur:</strong></label>
+                        <select id="element-select">
+                            <option value="1">Hidrogen (H)</option>
+                            <option value="2">Helium (He)</option>
+                            <option value="3">Litium (Li)</option>
+                            <option value="6">Karbon (C)</option>
+                            <option value="8">Oksigen (O)</option>
+                            <option value="11">Natrium (Na)</option>
+                            <option value="17">Klor (Cl)</option>
+                            <option value="26">Besi (Fe)</option>
+                            <option value="79">Emas (Au)</option>
+                            <option value="custom">🔧 Kustom</option>
+                        </select>
+                    </div>
+                    
+                    <div id="custom-inputs" class="custom-inputs" style="display: none;">
+                        <div class="input-group">
+                            <label for="proton-count">Proton</label>
+                            <input type="number" id="proton-count" min="1" max="118" value="1">
+                        </div>
+                        <div class="input-group">
+                            <label for="neutron-count">Neutron</label>
+                            <input type="number" id="neutron-count" min="0" max="200" value="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="electron-count">Elektron</label>
+                            <input type="number" id="electron-count" min="1" max="118" value="1">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="game-area">
+                    <div class="nucleus"></div>
+                </div>
+                
+                <div class="controls">
+                    <button id="animate-button" class="control-button">▶️ Mulai Animasi</button>
+                    <button id="pause-button" class="control-button">⏸️ Jeda</button>
+                    <button id="speed-button" class="control-button">⚡ Kecepatan</button>
+                    <button id="quiz-button" class="control-button">🧠 Kuis</button>
+                </div>
+            </div>
             
-            <div id="custom-inputs" style="display: none; margin-top: 10px;">
-                <label for="proton-count">Jumlah Proton: </label>
-                <input type="number" id="proton-count" min="1" max="118" value="1">
+            <div class="sidebar">
+                <div class="score-display" id="score-display">
+                    🏆 Skor: 0
+                </div>
                 
-                <label for="neutron-count">Jumlah Neutron: </label>
-                <input type="number" id="neutron-count" min="0" max="200" value="0">
+                <div class="info-panel">
+                    <div class="element-name" id="element-name">Hidrogen (H)</div>
+                    <div class="element-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Nomor Atom</div>
+                            <div class="detail-value" id="atom-number">1</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Proton</div>
+                            <div class="detail-value" id="proton-number">1</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Neutron</div>
+                            <div class="detail-value" id="neutron-number">0</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Elektron</div>
+                            <div class="detail-value" id="electron-number">1</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Massa Atom</div>
+                            <div class="detail-value" id="atomic-mass">1.008</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Konfigurasi</div>
+                            <div class="detail-value" id="electron-config">1s¹</div>
+                        </div>
+                    </div>
+                    <div class="element-description" id="element-description">
+                        Hidrogen adalah unsur kimia paling sederhana dan paling melimpah di alam semesta.
+                    </div>
+                </div>
                 
-                <label for="electron-count">Jumlah Elektron: </label>
-                <input type="number" id="electron-count" min="1" max="118" value="1">
-            </div>
-        </div>
-        
-        <div class="game-area">
-            <div class="nucleus"></div>
-            <!-- Orbits and electrons will be added dynamically -->
-        </div>
-        
-        <div class="controls">
-            <button id="animate-button">Mulai Animasi</button>
-            <button id="pause-button">Jeda</button>
-            <button id="info-button">Info Atom</button>
-        </div>
-        
-        <div class="info-panel" id="info-panel">
-            <div class="element-name" id="element-name">Hidrogen (H)</div>
-            <div class="element-details">
-                <div class="detail-item">
-                    <div>Nomor Atom</div>
-                    <div class="detail-value" id="atom-number">1</div>
+                <div class="quiz-panel" id="quiz-panel" style="display: none;">
+                    <h3>🧠 Kuis Cepat</h3>
+                    <div class="quiz-question" id="quiz-question"></div>
+                    <div class="quiz-options" id="quiz-options"></div>
+                    <button id="next-quiz" style="margin-top: 15px; width: 100%;">Pertanyaan Berikutnya</button>
                 </div>
-                <div class="detail-item">
-                    <div>Proton</div>
-                    <div class="detail-value" id="proton-number">1</div>
+                
+                <div class="instructions-panel" id="instructions-panel">
+                    <h3>📖 Cara Bermain</h3>
+                    <div class="instruction-steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <strong>Pilih Unsur:</strong> Gunakan dropdown untuk memilih unsur kimia atau pilih "Kustom" untuk membuat atom sendiri.
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <strong>Mulai Animasi:</strong> Klik tombol "▶️ Mulai Animasi" untuk melihat elektron berputar mengelilingi inti atom.
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <strong>Atur Kecepatan:</strong> Gunakan tombol "⚡ Kecepatan" untuk mengubah kecepatan animasi (Cepat/Normal/Lambat).
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <strong>Ikuti Kuis:</strong> Klik "🧠 Kuis" untuk menguji pengetahuan Anda tentang struktur atom dan dapatkan poin.
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">5</div>
+                            <div class="step-content">
+                                <strong>Buat Atom Kustom:</strong> Pilih "Kustom" dan atur jumlah proton, neutron, dan elektron sesuai keinginan.
+                            </div>
+                        </div>
+                    </div>
+                    <button id="start-tutorial" style="width: 100%; margin-top: 15px; background: linear-gradient(135deg, #00b894 0%, #00a085 100%);">🚀 Mulai Tutorial</button>
                 </div>
-                <div class="detail-item">
-                    <div>Neutron</div>
-                    <div class="detail-value" id="neutron-number">0</div>
-                </div>
-                <div class="detail-item">
-                    <div>Elektron</div>
-                    <div class="detail-value" id="electron-number">1</div>
-                </div>
-                <div class="detail-item">
-                    <div>Massa Atom</div>
-                    <div class="detail-value" id="atomic-mass">1.008</div>
-                </div>
-            </div>
-            <div id="element-description" style="margin-top: 10px;">
-                Hidrogen adalah unsur kimia paling sederhana dan paling melimpah di alam semesta.
             </div>
         </div>
     </div>
 
     <script>
         const elements = {
-            1: { name: "Hidrogen (H)", protons: 1, neutrons: 0, electrons: 1, mass: "1.008", description: "Hidrogen adalah unsur kimia paling sederhana dan paling melimpah di alam semesta." },
-            2: { name: "Helium (He)", protons: 2, neutrons: 2, electrons: 2, mass: "4.0026", description: "Helium adalah gas mulia, tidak berbau, tidak berwarna dan hampir tidak reaktif." },
-            3: { name: "Litium (Li)", protons: 3, neutrons: 4, electrons: 3, mass: "6.94", description: "Litium adalah logam alkali yang ringan dan reaktif." },
-            6: { name: "Karbon (C)", protons: 6, neutrons: 6, electrons: 6, mass: "12.011", description: "Karbon adalah blok pembangun kehidupan dan basis untuk kimia organik." },
-            8: { name: "Oksigen (O)", protons: 8, neutrons: 8, electrons: 8, mass: "15.999", description: "Oksigen sangat penting untuk respirasi dan pembakaran." },
-            11: { name: "Natrium (Na)", protons: 11, neutrons: 12, electrons: 11, mass: "22.990", description: "Natrium adalah logam alkali yang sangat reaktif." },
-            17: { name: "Klor (Cl)", protons: 17, neutrons: 18, electrons: 17, mass: "35.45", description: "Klor adalah halogen yang digunakan untuk disinfektan dan banyak senyawa." },
-            26: { name: "Besi (Fe)", protons: 26, neutrons: 30, electrons: 26, mass: "55.845", description: "Besi adalah logam yang sangat umum digunakan dan penting untuk fungsi biologis." },
-            79: { name: "Emas (Au)", protons: 79, neutrons: 118, electrons: 79, mass: "196.97", description: "Emas adalah logam mulia yang berharga dengan konduktivitas listrik tinggi." }
+            1: { name: "Hidrogen (H)", protons: 1, neutrons: 0, electrons: 1, mass: "1.008", config: "1s¹", description: "Hidrogen adalah unsur kimia paling sederhana dan paling melimpah di alam semesta. Gas ini tidak berwarna, tidak berbau, dan sangat mudah terbakar." },
+            2: { name: "Helium (He)", protons: 2, neutrons: 2, electrons: 2, mass: "4.0026", config: "1s²", description: "Helium adalah gas mulia yang tidak berbau, tidak berwarna, dan hampir tidak reaktif. Digunakan untuk mengisi balon dan sebagai gas pelindung dalam pengelasan." },
+            3: { name: "Litium (Li)", protons: 3, neutrons: 4, electrons: 3, mass: "6.94", config: "1s² 2s¹", description: "Litium adalah logam alkali yang ringan dan reaktif. Digunakan dalam baterai lithium-ion dan sebagai obat untuk gangguan bipolar." },
+            6: { name: "Karbon (C)", protons: 6, neutrons: 6, electrons: 6, mass: "12.011", config: "1s² 2s² 2p²", description: "Karbon adalah blok pembangun kehidupan dan basis untuk kimia organik. Dapat membentuk berbagai struktur seperti berlian dan grafit." },
+            8: { name: "Oksigen (O)", protons: 8, neutrons: 8, electrons: 8, mass: "15.999", config: "1s² 2s² 2p⁴", description: "Oksigen sangat penting untuk respirasi dan pembakaran. Membentuk sekitar 21% dari atmosfer bumi dan penting untuk kehidupan." },
+            11: { name: "Natrium (Na)", protons: 11, neutrons: 12, electrons: 11, mass: "22.990", config: "1s² 2s² 2p⁶ 3s¹", description: "Natrium adalah logam alkali yang sangat reaktif. Bersama klorin membentuk garam dapur (NaCl) yang penting untuk kehidupan." },
+            17: { name: "Klor (Cl)", protons: 17, neutrons: 18, electrons: 17, mass: "35.45", config: "1s² 2s² 2p⁶ 3s² 3p⁵", description: "Klor adalah halogen yang digunakan untuk disinfektan air dan dalam pembuatan berbagai senyawa kimia penting." },
+            26: { name: "Besi (Fe)", protons: 26, neutrons: 30, electrons: 26, mass: "55.845", config: "[Ar] 3d⁶ 4s²", description: "Besi adalah logam yang sangat umum digunakan dalam konstruksi dan industri. Juga penting untuk fungsi biologis seperti transport oksigen dalam darah." },
+            79: { name: "Emas (Au)", protons: 79, neutrons: 118, electrons: 79, mass: "196.97", config: "[Xe] 4f¹⁴ 5d¹⁰ 6s¹", description: "Emas adalah logam mulia yang berharga dengan konduktivitas listrik tinggi. Tahan korosi dan digunakan dalam perhiasan serta elektronik." }
         };
+
+        const quizQuestions = [
+            {
+                question: "Apa nama partikel bermuatan positif dalam inti atom?",
+                options: ["Elektron", "Proton", "Neutron", "Ion"],
+                correct: 1
+            },
+            {
+                question: "Berapa jumlah elektron dalam atom karbon netral?",
+                options: ["4", "6", "8", "12"],
+                correct: 1
+            },
+            {
+                question: "Partikel apa yang menentukan identitas unsur?",
+                options: ["Neutron", "Elektron", "Proton", "Nukleon"],
+                correct: 2
+            },
+            {
+                question: "Di mana elektron ditemukan dalam atom?",
+                options: ["Dalam inti", "Di kulit elektron", "Di neutron", "Di proton"],
+                correct: 1
+            },
+            {
+                question: "Apa yang terjadi jika atom kehilangan elektron?",
+                options: ["Menjadi ion negatif", "Menjadi ion positif", "Menjadi neutron", "Tidak berubah"],
+                correct: 1
+            }
+        ];
 
         let animationFrameId = null;
         let isAnimating = false;
         let currentElement = elements[1];
         let electrons = [];
+        let animationSpeed = 1;
+        let score = 0;
+        let currentQuiz = 0;
+        let tutorialStep = 0;
+        let tutorialActive = false;
         
-        // Electron shell configuration based on simplified Bohr model
-        const electronShells = [2, 8, 8, 18, 18, 32, 32];
+        const electronShells = [2, 8, 18, 32, 50, 72, 98];
         
-        // Initialize the game
+        const tutorialSteps = [
+            {
+                element: "#element-select",
+                message: "Mulai dengan memilih unsur kimia dari dropdown ini",
+                action: () => {
+                    document.getElementById("element-select").value = "6";
+                    updateAtom(elements[6]);
+                }
+            },
+            {
+                element: "#animate-button",
+                message: "Klik tombol ini untuk melihat elektron berputar mengelilingi inti atom",
+                action: () => {
+                    toggleAnimation();
+                }
+            },
+            {
+                element: "#speed-button",
+                message: "Ubah kecepatan animasi untuk mempelajari gerakan elektron",
+                action: () => {
+                    toggleSpeed();
+                }
+            },
+            {
+                element: "#quiz-button",
+                message: "Klik untuk menguji pengetahuan Anda dengan kuis interaktif",
+                action: null
+            }
+        ];
+        
         document.addEventListener("DOMContentLoaded", function() {
+            initializeEventListeners();
+            updateAtom(currentElement);
+            updateScore();
+        });
+        
+        function initializeEventListeners() {
             const elementSelect = document.getElementById("element-select");
             const customInputs = document.getElementById("custom-inputs");
-            const animateButton = document.getElementById("animate-button");
-            const pauseButton = document.getElementById("pause-button");
-            const infoButton = document.getElementById("info-button");
             
-            // Event listeners
             elementSelect.addEventListener("change", function() {
                 if (this.value === "custom") {
-                    customInputs.style.display = "block";
+                    customInputs.style.display = "grid";
                 } else {
                     customInputs.style.display = "none";
                     updateAtom(elements[parseInt(this.value)]);
                 }
             });
             
-            document.getElementById("proton-count").addEventListener("change", updateCustomAtom);
-            document.getElementById("neutron-count").addEventListener("change", updateCustomAtom);
-            document.getElementById("electron-count").addEventListener("change", updateCustomAtom);
+            document.getElementById("proton-count").addEventListener("input", updateCustomAtom);
+            document.getElementById("neutron-count").addEventListener("input", updateCustomAtom);
+            document.getElementById("electron-count").addEventListener("input", updateCustomAtom);
             
-            animateButton.addEventListener("click", toggleAnimation);
-            pauseButton.addEventListener("click", pauseAnimation);
-            infoButton.addEventListener("click", showAtomInfo);
+            document.getElementById("animate-button").addEventListener("click", toggleAnimation);
+            document.getElementById("pause-button").addEventListener("click", pauseAnimation);
+            document.getElementById("speed-button").addEventListener("click", toggleSpeed);
+            document.getElementById("quiz-button").addEventListener("click", toggleQuiz);
+            document.getElementById("next-quiz").addEventListener("click", nextQuiz);
+            document.getElementById("start-tutorial").addEventListener("click", startTutorial);
+        }
+        
+        function startTutorial() {
+            tutorialActive = true;
+            tutorialStep = 0;
+            showTutorialStep();
+        }
+        
+        function showTutorialStep() {
+            if (tutorialStep >= tutorialSteps.length) {
+                endTutorial();
+                return;
+            }
             
-            // Initialize with hydrogen
-            updateAtom(currentElement);
-        });
+            const step = tutorialSteps[tutorialStep];
+            const element = document.querySelector(step.element);
+            
+            if (element) {
+                // Clear previous highlights
+                document.querySelectorAll('.tutorial-highlight').forEach(el => {
+                    el.classList.remove('tutorial-highlight');
+                });
+                
+                // Highlight current element
+                element.classList.add('tutorial-highlight');
+                
+                // Show tooltip
+                showTooltip(element, step.message);
+                
+                // Add pulse animation
+                element.classList.add('pulse-animation');
+                
+                // Execute action if available
+                if (step.action) {
+                    setTimeout(step.action, 1000);
+                }
+                
+                // Move to next step after delay
+                setTimeout(() => {
+                    element.classList.remove('pulse-animation');
+                    tutorialStep++;
+                    setTimeout(showTutorialStep, 2000);
+                }, 3000);
+            }
+        }
+        
+        function showTooltip(element, message) {
+            // Remove existing tooltips
+            document.querySelectorAll('.tutorial-tooltip').forEach(tooltip => {
+                tooltip.remove();
+            });
+            
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tutorial-tooltip';
+            tooltip.textContent = message;
+            
+            const rect = element.getBoundingClientRect();
+            tooltip.style.left = `${rect.left + rect.width / 2}px`;
+            tooltip.style.top = `${rect.top - 60}px`;
+            tooltip.style.transform = 'translateX(-50%)';
+            
+            document.body.appendChild(tooltip);
+        }
+        
+        function endTutorial() {
+            tutorialActive = false;
+            
+            // Clean up
+            document.querySelectorAll('.tutorial-highlight').forEach(el => {
+                el.classList.remove('tutorial-highlight');
+            });
+            document.querySelectorAll('.tutorial-tooltip').forEach(tooltip => {
+                tooltip.remove();
+            });
+            
+            // Show completion message
+            alert('🎉 Tutorial selesai! Sekarang Anda bisa menjelajahi struktur atom dengan bebas.');
+        }
         
         function updateAtom(element) {
             currentElement = element;
@@ -262,38 +811,38 @@
             document.getElementById("neutron-number").textContent = element.neutrons;
             document.getElementById("electron-number").textContent = element.electrons;
             document.getElementById("atomic-mass").textContent = element.mass;
+            document.getElementById("electron-config").textContent = element.config;
             document.getElementById("element-description").textContent = element.description;
             
-            // Clear previous atom
             const gameArea = document.querySelector(".game-area");
             const nucleus = document.querySelector(".nucleus");
             
-            // Remove old electrons and orbits
+            // Clear previous elements
             document.querySelectorAll(".electron, .orbit").forEach(el => el.remove());
-            
-            // Clear nucleus
             nucleus.innerHTML = "";
             
-            // Add protons and neutrons to nucleus
+            // Add nucleons
             for (let i = 0; i < element.protons; i++) {
                 const proton = document.createElement("div");
                 proton.className = "proton";
+                proton.style.animationDelay = `${Math.random() * 2}s`;
                 nucleus.appendChild(proton);
             }
             
             for (let i = 0; i < element.neutrons; i++) {
                 const neutron = document.createElement("div");
                 neutron.className = "neutron";
+                neutron.style.animationDelay = `${Math.random() * 2}s`;
                 nucleus.appendChild(neutron);
             }
             
-            // Adjust nucleus size based on number of nucleons
+            // Adjust nucleus size
             const nucleonCount = element.protons + element.neutrons;
-            const nucleusSize = Math.max(100, Math.min(150, 80 + Math.sqrt(nucleonCount) * 10));
+            const nucleusSize = Math.max(60, Math.min(120, 50 + Math.sqrt(nucleonCount) * 8));
             nucleus.style.width = `${nucleusSize}px`;
             nucleus.style.height = `${nucleusSize}px`;
             
-            // Create electron shells and electrons
+            // Create electron shells
             electrons = [];
             let remainingElectrons = element.electrons;
             let shellIndex = 0;
@@ -302,24 +851,24 @@
                 const shellCapacity = electronShells[shellIndex];
                 const electronsInShell = Math.min(remainingElectrons, shellCapacity);
                 
-                // Create orbit
-                const orbitRadius = 80 + (shellIndex + 1) * 40;
+                const orbitRadius = 60 + (shellIndex + 1) * 35;
                 const orbit = document.createElement("div");
                 orbit.className = "orbit";
                 orbit.style.width = `${orbitRadius * 2}px`;
                 orbit.style.height = `${orbitRadius * 2}px`;
+                orbit.style.animationDelay = `${shellIndex * 0.5}s`;
                 gameArea.appendChild(orbit);
                 
-                // Create electrons for this shell
                 for (let i = 0; i < electronsInShell; i++) {
-                    const angle = (i / electronsInShell) * 2 * Math.PI;
+                    const angle = (i / electronsInShell) * 2 * Math.PI + Math.random() * 0.5;
                     const electron = document.createElement("div");
                     electron.className = "electron";
+                    electron.style.animationDelay = `${Math.random()}s`;
                     
                     electrons.push({
                         element: electron,
                         radius: orbitRadius,
-                        speed: 0.001 * (4 - Math.min(3, shellIndex)), // Outer electrons move slower
+                        speed: (0.002 + Math.random() * 0.001) * (4 - Math.min(3, shellIndex)),
                         angle: angle,
                         shellIndex: shellIndex
                     });
@@ -331,48 +880,73 @@
                 shellIndex++;
             }
             
-            // Start animation if it was already running
             if (isAnimating) {
                 pauseAnimation();
                 animateElectrons();
             } else {
-                // Just position electrons without animation
                 positionElectrons();
             }
         }
         
         function updateCustomAtom() {
-            const protons = parseInt(document.getElementById("proton-count").value);
-            const neutrons = parseInt(document.getElementById("neutron-count").value);
-            const electrons = parseInt(document.getElementById("electron-count").value);
+            const protons = parseInt(document.getElementById("proton-count").value) || 1;
+            const neutrons = parseInt(document.getElementById("neutron-count").value) || 0;
+            const electrons = parseInt(document.getElementById("electron-count").value) || 1;
             
             const customElement = {
-                name: `Custom (${protons}p, ${neutrons}n, ${electrons}e)`,
+                name: `Kustom (${protons}p, ${neutrons}n, ${electrons}e)`,
                 protons: protons,
                 neutrons: neutrons,
                 electrons: electrons,
                 mass: (protons + neutrons).toFixed(3),
-                description: "Atom kustom yang Anda buat."
+                config: "Konfigurasi kustom",
+                description: "Atom kustom yang Anda buat untuk eksplorasi."
             };
             
             updateAtom(customElement);
         }
         
         function positionElectrons() {
+            const gameArea = document.querySelector(".game-area");
+            const rect = gameArea.getBoundingClientRect();
+            const centerX = gameArea.offsetWidth / 2;
+            const centerY = gameArea.offsetHeight / 2;
+            
             electrons.forEach(electron => {
-                electron.element.style.left = `${300 + electron.radius * Math.cos(electron.angle)}px`;
-                electron.element.style.top = `${200 + electron.radius * Math.sin(electron.angle)}px`;
+                const x = centerX + electron.radius * Math.cos(electron.angle);
+                const y = centerY + electron.radius * Math.sin(electron.angle);
+                electron.element.style.left = `${x}px`;
+                electron.element.style.top = `${y}px`;
             });
         }
         
         function animateElectrons() {
             isAnimating = true;
+            const gameArea = document.querySelector(".game-area");
+            const centerX = gameArea.offsetWidth / 2;
+            const centerY = gameArea.offsetHeight / 2;
             
             function animate() {
-                electrons.forEach(electron => {
-                    electron.angle += electron.speed;
-                    electron.element.style.left = `${300 + electron.radius * Math.cos(electron.angle)}px`;
-                    electron.element.style.top = `${200 + electron.radius * Math.sin(electron.angle)}px`;
+                electrons.forEach((electron, electronIndex) => {
+                    // Update electron position
+                    electron.angle += electron.speed * animationSpeed;
+                    const x = centerX + electron.radius * Math.cos(electron.angle);
+                    const y = centerY + electron.radius * Math.sin(electron.angle);
+                    
+                    // Apply some orbital wobble for realism
+                    const wobbleX = Math.sin(electron.angle * 3) * 2;
+                    const wobbleY = Math.cos(electron.angle * 2) * 1.5;
+                    
+                    electron.element.style.left = `${x + wobbleX}px`;
+                    electron.element.style.top = `${y + wobbleY}px`;
+                    
+                    // Create electron trail effect
+                    if (Math.random() < 0.3) {
+                        createElectronTrail(x + wobbleX, y + wobbleY);
+                    }
+                    
+                    // Add slight rotation to electrons
+                    electron.element.style.transform = `translate(-50%, -50%) rotate(${electron.angle * 57.3}deg)`;
                 });
                 
                 animationFrameId = requestAnimationFrame(animate);
@@ -381,13 +955,28 @@
             animate();
         }
         
+        function createElectronTrail(x, y) {
+            const trail = document.createElement('div');
+            trail.className = 'electron-trail';
+            trail.style.left = `${x}px`;
+            trail.style.top = `${y}px`;
+            
+            document.querySelector('.game-area').appendChild(trail);
+            
+            // Remove trail after animation
+            setTimeout(() => {
+                if (trail.parentNode) {
+                    trail.parentNode.removeChild(trail);
+                }
+            }, 500);
+        }
+        
         function toggleAnimation() {
             if (!isAnimating) {
                 animateElectrons();
-                document.getElementById("animate-button").textContent = "Mulai Ulang Animasi";
+                document.getElementById("animate-button").innerHTML = "🔄 Mulai Ulang";
             } else {
                 pauseAnimation();
-                // Reset electron positions
                 electrons.forEach(electron => {
                     electron.angle = Math.random() * 2 * Math.PI;
                 });
@@ -400,14 +989,79 @@
                 cancelAnimationFrame(animationFrameId);
                 animationFrameId = null;
                 isAnimating = false;
-                document.getElementById("animate-button").textContent = "Mulai Animasi";
+                document.getElementById("animate-button").innerHTML = "▶️ Mulai Animasi";
             }
         }
         
-        function showAtomInfo() {
-            const infoPanel = document.getElementById("info-panel");
-            infoPanel.style.display = infoPanel.style.display === "none" ? "block" : "none";
+        function toggleSpeed() {
+            animationSpeed = animationSpeed === 1 ? 2 : animationSpeed === 2 ? 0.5 : 1;
+            const speedButton = document.getElementById("speed-button");
+            speedButton.innerHTML = animationSpeed === 1 ? "⚡ Normal" : 
+                                   animationSpeed === 2 ? "🐌 Lambat" : "🚀 Cepat";
+        }
+        
+        function toggleQuiz() {
+            const quizPanel = document.getElementById("quiz-panel");
+            const infoPanel = document.querySelector(".info-panel");
+            
+            if (quizPanel.style.display === "none") {
+                quizPanel.style.display = "block";
+                infoPanel.style.display = "none";
+                loadQuiz();
+            } else {
+                quizPanel.style.display = "none";
+                infoPanel.style.display = "block";
+            }
+        }
+        
+        function loadQuiz() {
+            const quiz = quizQuestions[currentQuiz];
+            document.getElementById("quiz-question").textContent = quiz.question;
+            
+            const optionsContainer = document.getElementById("quiz-options");
+            optionsContainer.innerHTML = "";
+            
+            quiz.options.forEach((option, index) => {
+                const optionDiv = document.createElement("div");
+                optionDiv.className = "quiz-option";
+                optionDiv.textContent = option;
+                optionDiv.addEventListener("click", () => checkAnswer(index));
+                optionsContainer.appendChild(optionDiv);
+            });
+        }
+        
+        function checkAnswer(selectedIndex) {
+            const quiz = quizQuestions[currentQuiz];
+            const options = document.querySelectorAll(".quiz-option");
+            
+            options.forEach((option, index) => {
+                option.classList.remove("correct", "incorrect");
+                if (index === quiz.correct) {
+                    option.classList.add("correct");
+                } else if (index === selectedIndex && index !== quiz.correct) {
+                    option.classList.add("incorrect");
+                }
+                option.style.pointerEvents = "none";
+            });
+            
+            if (selectedIndex === quiz.correct) {
+                score += 10;
+                updateScore();
+            }
+            
+            setTimeout(() => {
+                options.forEach(option => {
+                    option.style.pointerEvents = "auto";
+                });
+            }, 2000);
+        }
+        
+        function nextQuiz() {
+            currentQuiz = (currentQuiz + 1) % quizQuestions.length;
+            loadQuiz();
+        }
+        
+        function updateScore() {
+            document.getElementById("score-display").innerHTML = `🏆 Skor: ${score}`;
         }
     </script>
-</body>
-</html>
